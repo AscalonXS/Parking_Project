@@ -1,6 +1,6 @@
 package Parking_Classes;
 
-class ParkingManager extends Parking
+public class ParkingManager extends Parking
 {
     ParkingManager(String name, String addr, String ... temp)
     {

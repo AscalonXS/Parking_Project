@@ -2,13 +2,13 @@ package Parking_Classes;
 import java.util.*;
 
 
-class Parking
+public class Parking
 {
     /*Parking Place Class*/
-    LinkedList<ParkSpace> parkList = new LinkedList<ParkSpace>();
-    String ParkName;
-    String addr;
-    Deque<ParkSpace> availabe_park_list = new LinkedList<ParkSpace>();
+    protected  LinkedList<ParkSpace> parkList = new LinkedList<ParkSpace>();
+    private String ParkName;
+    private String addr;
+    protected  Deque<ParkSpace> availabe_park_list = new LinkedList<ParkSpace>();
 
     public Parking(String name, String addr)
     {
@@ -20,7 +20,6 @@ class Parking
     void Initialiazing_List_Park_Space(String ... temp)
     {
         /*Take every posibble Parking Space add it to the parking Space list then initialize to the parkspace*/
-
         for (String elem : temp)
         {
             parkList.add(new ParkSpace(elem,this));
@@ -60,7 +59,7 @@ class Parking
 
         for (ParkSpace space : parkList)
         {
-            if (space.isTaken)
+            if (space.isTaken())
             {
                 taken++;
             }
@@ -77,12 +76,47 @@ class Parking
 
         for (ParkSpace space : parkList)
         {
-            System.out.println(
-                    space.ID + " : " +
-                            (space.isTaken ? "Taken" : "Available")
-            );
+            System.out.println(space.getID() + " : " + (space.isTaken() ? "Taken" : "Available"));
         }
 
         System.out.println("==========================");
     }
+
+    public String getParkName() 
+    {
+        return ParkName;
+    }
+
+    public String getAddr() 
+    {
+        return addr;
+    }
+    
+    public int getTotalSpace()
+    {
+        return  parkList.size();
+    }
+
+    public int countAvailablSpace()
+    {
+        return  availabe_park_list.size();
+    }
+
+    public LinkedList<ParkSpace> getAllSpaces()
+    {
+        return new LinkedList<ParkSpace>(availabe_park_list);
+    }
+
+    public ParkSpace findSpaceById(String a)
+    {
+        for(ParkSpace i: parkList)
+        {
+            if(i.getID().equals(a))
+            {
+                return i;
+            }
+        }
+        return  null;
+    }
+
 }
