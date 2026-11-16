@@ -1,14 +1,11 @@
--- ParkingDB.sql  (Microsoft SQL Server)
--- Run it once in SSMS or Azure Data Studio. It is safe to run again:
--- nothing is dropped and nothing is inserted twice.
--- GO is a batch separator of those tools, so do not run this file through JDBC.
-
 IF DB_ID('ParkingDB') IS NULL
     CREATE DATABASE ParkingDB;
 GO
 
 USE ParkingDB;
 GO
+
+/*Note : Professor these are AI generated Peace Sign*/
 
 -- users: login accounts. role decides which side of the web page they see.
 IF OBJECT_ID('dbo.users', 'U') IS NULL
@@ -25,7 +22,7 @@ GO
 IF OBJECT_ID('dbo.parking_lots', 'U') IS NULL
 CREATE TABLE dbo.parking_lots (
     id      INT IDENTITY(1, 1) PRIMARY KEY,
-    name    VARCHAR(100) NOT NULL UNIQUE,
+    name    VARCHAR(100) NOT NULL UNIQUE
     address VARCHAR(300) NOT NULL
 );
 GO
@@ -38,7 +35,7 @@ CREATE TABLE dbo.park_spaces (
     space_code VARCHAR(20) NOT NULL,                      -- e.g. A1, A2, A3
     is_taken   BIT         NOT NULL DEFAULT 0,            -- 0 = free, 1 = taken
     CONSTRAINT fk_spaces_lot FOREIGN KEY (lot_id)
-        REFERENCES dbo.parking_lots(id) ON DELETE CASCADE, -- deleting a lot deletes its slots
+    REFERENCES dbo.parking_lots(id) ON DELETE CASCADE, -- deleting a lot deletes its slots
     CONSTRAINT uq_spaces_lot_code UNIQUE (lot_id, space_code)
 );
 GO
@@ -67,9 +64,9 @@ CREATE TABLE dbo.sessions (
     end_time   DATETIME2 NULL,
     fare       INT       NULL,
     CONSTRAINT fk_sessions_space FOREIGN KEY (space_id)
-        REFERENCES dbo.park_spaces(id) ON DELETE CASCADE,
+    REFERENCES dbo.park_spaces(id) ON DELETE CASCADE,
     CONSTRAINT fk_sessions_car FOREIGN KEY (car_id)
-        REFERENCES dbo.cars(id) ON DELETE CASCADE
+    REFERENCES dbo.cars(id) ON DELETE CASCADE
 );
 GO
 
@@ -110,6 +107,3 @@ IF NOT EXISTS (SELECT 1 FROM dbo.cars)
            ('TEST-002', 'Test Owner 2', 'SUV',   50000);
 GO
 
--- Users are not created here. Create them from Java with UserDao.createUser,
--- then link a car to a user with:
---   UPDATE dbo.cars SET user_id = <users.id> WHERE plate_number = 'TEST-001';

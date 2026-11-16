@@ -6,24 +6,25 @@ import java.sql.SQLException;
 
 public class DataBase
 {
-    private static final String DEFAULT_URL =
-        "jdbc:sqlserver://localhost:1433;databaseName=ParkingDB;encrypt=true;trustServerCertificate=true"; //you can edit this depend on where you run MYSQL Server
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/parkingdb"; //ywe can edit this depend on where you run MYSQL Server
 
     public static Connection getConnection() throws SQLException
     {
-        String url = System.getenv("PARKING_DB_URL");
-        String user = System.getenv("PARKING_DB_USER");
-        String password = System.getenv("PARKING_DB_PASSWORD");
+        return DriverManager.getConnection(DEFAULT_URL, "root", "4444");
+    }
 
-        if (url == null || url.isBlank())
+    public static void main(String[] args) 
+    {
+        // Testing 
+        try
         {
-            url = DEFAULT_URL;
+            Connection temp = getConnection();
+            System.out.println("Connected");
+            temp.close();
         }
-        if (user == null || password == null)
+        catch (SQLException e)
         {
-            throw new SQLException("Set the PARKING_DB_USER and PARKING_DB_PASSWORD environment variables.");
+            e.getStackTrace();
         }
-
-        return DriverManager.getConnection(url, user, password);
     }
 }

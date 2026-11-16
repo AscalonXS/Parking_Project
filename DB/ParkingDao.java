@@ -1,13 +1,26 @@
 package DB;
 
-import Parking_Classes.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import  java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import  java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import Parking_Classes.Car;
+import Parking_Classes.ParkSpace;
+import Parking_Classes.Parking;
+import Parking_Classes.ParkingManager;
 
 public class ParkingDao
 {
-    /* Helper used only while reading the lots query. */
     private static class LotRow
     {
         String name;
@@ -16,15 +29,13 @@ public class ParkingDao
         Set<String> taken = new HashSet<>();
     }
 
-    /*
-     * Build every lot with all its slots, using your ParkingManager.
-     * A slot with is_taken = 1 is marked taken and kept out of the available list,
-     * so the objects match the database.
-     */
+
+    
     public List<Parking> loadAllLots()
     {
+        // We 
         String sql = "SELECT l.id, l.name, l.address, s.space_code, s.is_taken "
-                   + "FROM parking_lots l LEFT JOIN park_spaces s ON s.lot_id = l.id "
+                   + "FROM parking_lots l LEFT JOIN park_spaces s ON s.lot_id = l.id " // By Parking Lots ID we do left Join 
                    + "ORDER BY l.id, s.id";
 
         Map<Integer, LotRow> rows = new LinkedHashMap<>();
@@ -33,9 +44,13 @@ public class ParkingDao
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery())
         {
+            // taking ResultSet and loops 
             while (rs.next())
             {
+                // Checking whether the parking is already in the HashLinked List
                 LotRow row = rows.get(rs.getInt("id"));
+
+                //if no create 
                 if (row == null)
                 {
                     row = new LotRow();
@@ -44,7 +59,9 @@ public class ParkingDao
                     rows.put(rs.getInt("id"), row);
                 }
 
+                //extract the park_space
                 String code = rs.getString("space_code");  // null when the lot has no slots
+                //if it has then goo
                 if (code != null)
                 {
                     row.codes.add(code);
@@ -60,6 +77,7 @@ public class ParkingDao
             throw new RuntimeException(e);
         }
 
+        // Based On the Hash We Start Building the Parking
         List<Parking> lots = new ArrayList<>();
         for (LotRow row : rows.values())
         {
@@ -68,10 +86,7 @@ public class ParkingDao
         return lots;
     }
 
-    /*
-     * Creates the lot, then marks the taken slots using only methods your classes already have.
-     * (package-private on purpose, so it can be tested without a database)
-     */
+
     static Parking buildLot(String name, String addr, List<String> codes, Set<String> takenCodes)
     {
         ParkingManager lot = new ParkingManager(name, addr, codes.toArray(new String[0]));
@@ -79,10 +94,10 @@ public class ParkingDao
         // Every slot starts free, in the same order as codes. Take them all out one by one:
         // a taken slot stays out (and is marked taken), a free slot is remembered.
         List<ParkSpace> free = new ArrayList<>();
+       
         for (int i = 0; i < codes.size(); i++)
         {
             ParkSpace space = lot.takeParkSpace();
-
             if (takenCodes.contains(space.getID()))
             {
                 space.setIsTaken(true);
@@ -99,14 +114,14 @@ public class ParkingDao
             lot.addAvailableParkSpace(free.get(i));
         }
 
+        // 
         return lot;
     }
 
-    /* Returns the car (with its balance, not parked), or null if the plate is unknown. */
     public Car loadCar(String number)
     {
+        // Will loadCar 
         String sql = "SELECT plate_number, owner_name, car_type, balance FROM cars WHERE plate_number = ?";
-
         try (Connection con = DataBase.getConnection();
              PreparedStatement ps = con.prepareStatement(sql))
         {
@@ -128,12 +143,9 @@ public class ParkingDao
         }
     }
 
-    /*
-     * Cars that are parked right now. Each row is {carNumber, lotName, spaceId, sessionId, startTime}.
-     * ParkingService uses this at startup to put the cars back in their slots.
-     */
     public List<String[]> loadOpenSessions()
     {
+        //Loading a Session
         String sql = "SELECT c.plate_number, l.name, sp.space_code, s.id, s.start_time "
                    + "FROM sessions s "
                    + "JOIN cars c ON c.id = s.car_id "
@@ -167,6 +179,7 @@ public class ParkingDao
 
     public void saveSpaceStatus(String lotName, String spaceId, boolean taken)
     {
+        // Update Space Status
         String sql = "UPDATE park_spaces SET is_taken = ? "
                    + "WHERE space_code = ? AND lot_id = (SELECT id FROM parking_lots WHERE name = ?)";
 
@@ -188,9 +201,9 @@ public class ParkingDao
         }
     }
 
-    /* Opens a session (end_time stays NULL) and returns its id. */
     public int startSession(String carNumber, String lotName, String spaceId, LocalDateTime start)
     {
+        // Start New Sessions
         String sql = "INSERT INTO sessions (space_id, car_id, start_time) "
                    + "SELECT sp.id, c.id, ? "
                    + "FROM park_spaces sp "
@@ -225,6 +238,7 @@ public class ParkingDao
 
     public void endSession(int sessionId, LocalDateTime end, int fare)
     {
+        // End the new Session
         String sql = "UPDATE sessions SET end_time = ?, fare = ? WHERE id = ? AND end_time IS NULL";
 
         try (Connection con = DataBase.getConnection();
@@ -243,6 +257,7 @@ public class ParkingDao
 
     public void updateBalance(String carNumber, int newBalance)
     {
+        // Update the Balance
         String sql = "UPDATE cars SET balance = ? WHERE plate_number = ?";
 
         try (Connection con = DataBase.getConnection();
@@ -258,9 +273,9 @@ public class ParkingDao
         }
     }
 
-    /* Finished visits of one car, newest first. Each row is {lotName, spaceId, start, end, fare}. */
     public List<String[]> getHistory(String carNumber)
     {
+        //Create history of Order 
         String sql = "SELECT l.name, sp.space_code, s.start_time, s.end_time, s.fare "
                    + "FROM sessions s "
                    + "JOIN cars c ON c.id = s.car_id "
