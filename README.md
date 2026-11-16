@@ -27,6 +27,7 @@ Kinda like this
 ### Car.java 
 
 **Attributes**
+    
     - carType : String 
     - OwnerName : String 
     - Number : String 
@@ -36,6 +37,7 @@ Kinda like this
     - takePlace : LocalDateTIme 
 
 *Method*   
+    
     - Car : Car Class Constructor, Initial The Car Object. 
 
     - takeParkSpace(ParkSpace) : Car Taking ParkSpace and time for taking place is Started return **void** 
@@ -70,6 +72,7 @@ Kinda like this
 
 
 *Methods*
+    
     - Parking (String Name , String addr) : Constructor for Parking Lot 
 
     - Initialiazing_List_Park_Space(String ... temp) : return void, executed when we want to initialize parking Lot with what Parking space it has and available parking space. 
@@ -108,11 +111,13 @@ Kinda like this
 ### ParkSpace.java 
 
 *Attributes*
+    
     isTaken : boolean 
     ID : String 
     belongToWhichParking : Parking 
 
 *Methods*
+    
     ParkSpace(String, Parking,) : initialize isTaken as False By default
                                   and construct ParkSpace then return it 
 
@@ -141,9 +146,11 @@ Kinda like this
 ### ParkingDB.SQL 
 
 *Data Bases* 
+    
     -> ParkingDB  
 
 Tables : 
+    
     - users 
         Columns : 
             + id (Primary Key)
@@ -185,12 +192,14 @@ Tables :
 
 ### UserDAO.java
 *Attributes*
+    
     - id : int
     - username : String
     - role : String
     - carNumber : String
 
 *Methods*
+    
     - UserAccount(
         int -> id, 
         String -> username, 
@@ -213,6 +222,7 @@ Tables :
 ### ParkingDao.java
 
 *Helper class (private, inside ParkingDao.java)*
+    
     - LotRow : holds one lot's data while the query is being read
         - name : String
         - addr : String
@@ -220,6 +230,7 @@ Tables :
         - taken : Set<String> (the codes that are taken)
 
 *Methods*
+    
     - loadAllLots()
         : returns List<Parking>, one ParkingManager per lot with all its slots
         : a lot with no slots is still returned (with 0 slots)
