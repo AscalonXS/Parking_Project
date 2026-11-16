@@ -21,7 +21,7 @@ public class Car
         this.balance = balance;
     }
 
-    void takeParkSpace(ParkSpace ps)
+    public void takeParkSpace(ParkSpace ps)
     {
         this.ps = ps;
         this.takePlace = LocalDateTime.now();

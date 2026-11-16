@@ -17,7 +17,7 @@ public class Parking
         this.addr = addr;
     }
 
-    void Initialiazing_List_Park_Space(String ... temp)
+    public void Initialiazing_List_Park_Space(String ... temp)
     {
         /*Take every posibble Parking Space add it to the parking Space list then initialize to the parkspace*/
         for (String elem : temp)
@@ -31,23 +31,23 @@ public class Parking
         }
     }
 
-    void addAvailableParkSpace(ParkSpace a)
+    public void addAvailableParkSpace(ParkSpace a)
     {
         // Add to Available
         availabe_park_list.addFirst(a);
     }
 
-    ParkSpace takeParkSpace()
+    public ParkSpace takeParkSpace()
     {
         return availabe_park_list.removeFirst();
     }
 
-    boolean isFull()
+    public boolean isFull()
     {
         return  availabe_park_list.isEmpty();
     }
 
-    void  display_Status()
+    public void  display_Status()
     {
         System.out.println("===== PARKING STATUS =====");
         System.out.println("Parking Name : " + ParkName);
