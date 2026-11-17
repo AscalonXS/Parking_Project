@@ -231,6 +231,9 @@ Tables :
 
 *Methods*
     
+    - loadAllCars()
+        : Return List<Cars>
+
     - loadAllLots()
         : returns List<Parking>, one ParkingManager per lot with all its slots
         : a lot with no slots is still returned (with 0 slots)
@@ -286,3 +289,178 @@ Tables :
         : returns an empty list if the car has no finished visits
         : throws RuntimeException on a database error
 
+## services 
+
+    Folder that handle the holy moly interface between web and DB
+
+### CarInfo 
+
+    // Additional Clas as helper, will return CarInfo Object 
+
+*Attribute*
+    
+    - number : String -> carNumberPlate
+    - owner_name : String 
+    - car_type : String 
+    - balance : int
+    - parked : boolean
+    - lot_name : String 
+    - space_id : String 
+    - start_time : String 
+
+*Methods*
+
+    - CarInfo(String,    
+              String 
+              String
+              int
+              boolean,
+              String,
+              String,
+              String
+     ) -> Constructor for CarInfo
+
+### LeaveResult 
+
+    // Additional Class as helper, will return LeaveResult Object 
+
+*Attribute*
+    
+    - success : boolean
+    - message : String 
+    - fare : int 
+    - newBalance : int
+    - minutesParked : long
+
+*Methods*
+
+    - LeveResult(boolean,
+                 String
+                 int,
+                 int,
+                 long
+     ) -> Constructor for LeveResult
+
+
+### LotDetail 
+
+    // Additional Clas as helper, will return LotDetail Object 
+
+*Attribute*
+    
+    String name;
+    String addr;
+    int total;
+    int free;
+    List<SpaceInfo> spaces;
+
+*Methods*
+
+    - LotDetail (String n, String a, int t, int f, List<SpaceInfo> spaces
+     ) -> Constructor for LotDetail
+
+### LotSummary 
+
+    // Additional Class as helper, will return LotSummary Object 
+
+*Attribute*
+    
+    String name;
+    String addr;
+    int total;
+    int free; 
+
+*Methods*
+
+    - LotSummary(String n, String a,
+     int t, int f
+     ) -> Constructor for LotSummary
+
+### LotSummary 
+
+    // Additional Class as helper, will return LotSummary Object 
+
+*Attribute*
+    
+    String name;
+    String addr;
+    int total;
+    int free; 
+
+*Methods*
+
+    - LotSummary(String n, String a,
+     int t, int f
+     ) -> Constructor for LotSummary
+
+### ParkResult 
+
+    // Additional Class as helper, will return ParkResult Object 
+
+*Attribute*
+    
+    public boolean success;     // true if the car parked
+    public String message;      // response to the user 
+    public String lotName;      // filled when success
+    public String spaceId; 
+
+*Methods*
+
+    - ParkResult(boolean success, 
+        String message, 
+        String lotName, String spaceId
+     ) -> Constructor for ParkResult
+
+### SpaceInfo 
+
+    // Additional Class as helper, will return SpaceInfo Object 
+
+*Attribute*
+    
+    String id
+    boolean taken
+
+*Methods*
+
+    - SpaceInfo(String i,boolean t, 
+     ) -> Constructor for SpaceInfo
+
+
+### ParkingService.java 
+
+*Attributes*
+
+    - temp : ParkingDao -> Data Access object for DB 
+    - lots : HashMap<String, Parking>
+    - cars : HashMap<String,Car>
+    - open_sessions : HashMap<String, Integer> -> Here integer are Sessions ID 
+
+*Methods*
+    
+    - ParkService() -> Constructor 
+    
+    - synchronizedPark(String, String) -> Syn + update DB+ take ParkSpace + return ParkResult Object 
+
+    - LeaveResult (String) -> Update DB Leave return LeaveResult Object 
+
+    - getLots() -> Return List<LotsSummary> for every Lots
+
+    - getLotDetail(String) -> return LotDetail based on requested lotName in the par
+
+    - getAllStatus() -> return List<LotDetail> getting all status for lot
+
+    - getCarInfo(String) -> return CarInfo for spefic Car Plate
+
+### SessionManager.java
+
+*Attributes*
+    
+    private final Map<String, UserAccount> sessions = new ConcurrentHashMap<>();
+
+*Method*
+
+    - createSession(UserAccount) : put it on running session and return the string token
+
+    -  getUser(String token) : vice versa -> return the UserAccount based on token
+
+    - removeSession(String) : void just remove the session in our map
