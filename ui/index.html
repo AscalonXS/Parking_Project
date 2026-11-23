@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turtle Park</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- template -->
+    <!-- Top bar
+      Welcome section
+      3 slots            TURTLE
+      reserve action       LOT
+      hardware info -->
+
+    <!-- HEADER -->
+    <header>
+      <div class="topbar">
+        <img src="turtle1.png" alt="Turtle logo" class="turtle-logo" />
+        <h1 class="brand">TURTLE PARK</h1>
+      </div>
+      <div class="navbar">
+        <button>Dashboard</button>
+        <button>Reservation</button>
+        <button>Demo mode</button>
+        <button>Logout</button>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="box">
+      <div class="ment">YOUR EVERYDAY PIT STOP</div>
+      <div class="wc">
+        <h1>Hello, Turtle Driver!</h1>
+        <p>Find your little spot.</p>
+      </div>
+
+      <!-- holding everything in the middle -->
+      <div class="traffic">
+        <div class="leftstack">
+          <!-- the 3 mini boxes -->
+          <div class="statsrow">
+            <div class="stat-minibox">
+              <div class="num">05</div>
+              <div class="stat-info">Total spaces</div>
+            </div>
+            <div class="stat-minibox">
+              <div class="num">03</div>
+              <div class="stat-info">Occupied</div>
+            </div>
+            <div class="stat-miniavail">
+              <div class="num">02</div>
+              <div class="stat-info">Available</div>
+            </div>
+          </div>
+
+          <!-- reserve box -->
+          <div class="ResCard">
+            <h2>Make room for a good day.</h2>
+            <p>
+              Your next spot is waiting. We'll assign the first available space
+              for you.
+            </p>
+            <button class="ResBtn" onclick="">
+              <span>Reserve a Spot</span>
+              <span>➜</span>
+            </button>
+            <div class="ment2">No circling. No guesswork. Just park.</div>
+          </div>
+
+          <!-- hardware deets -->
+          <div class="HWdeets">
+            <h3>A smart little system</h3>
+            <div class="tools">
+              Arduino Uno . 2 HC-SR04 sensors . 180 Servo . LCD
+            </div>
+            <p>
+              Entrance and exit sensors track vehicle flow. Spaces are assigned
+              by reservation, not individual bay sensors. Please park in your
+              assigned spot.
+            </p>
+          </div>
+        </div>
+
+        <div class="rightstack">
+          <!-- text above slots -->
+          <div class="LotCard">
+            <div>
+              <h2>The Turtle Lot</h2>
+              <p>A tiny map. A little peace of mind.</p>
+            </div>
+
+            <div class="lotslots">
+              <div class="judul">TURTLE PARK</div>
+              <div class="slots"></div>
+              <div class="road">
+                <span>↑ ENTRY</span>
+                <span class="dash"></span>
+                <span>EXIT →</span>
+              </div>
+            </div>
+            <!-- 3 dot colors below -->
+            <div class="lotColors">
+              <span class="items"> <span class="gdot"></span> Available</span>
+              <span class="items"> <span class="ydot"></span> Reserved</span>
+              <span class="items"> <span class="rdot"> Occupied</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

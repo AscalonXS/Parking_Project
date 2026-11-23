@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turtle Park — Smart Parking Lot</title>
+    <style>
+      :root {
+        --bg: #f6f6f1;
+        --surface: #ffffff;
+        --ink: #1d2620;
+        --muted: #657369;
+        --line: #e2e6de;
+        --sage-soft: #eaf1e8;
+        --forest: #2d5a42;
+        --forest-hover: #234734;
+
+        --available-bg: #e7f5ec;
+        --available-border: #8ec7a3;
+        --available-ink: #1f6339;
+
+        --reserved-bg: #fff6dc;
+        --reserved-border: #e6be5a;
+        --reserved-ink: #8a5a00;
+
+        --occupied-bg: #fdeaea;
+        --occupied-border: #e38b8b;
+        --occupied-ink: #992626;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.45;
+      }
+
+      header {
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+        padding: 16px 36px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-img {
+        width: 38px;
+        height: 38px;
+        image-rendering: pixelated;
+        border-radius: 8px;
+      }
+
+      .brand-title {
+        font-size: 1.45rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      .nav-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+      }
+
+      .nav-pill {
+        background: var(--sage-soft);
+        color: var(--ink);
+        border: none;
+        border-radius: 999px;
+        padding: 7px 16px;
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .nav-link {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+        cursor: pointer;
+        padding: 6px 8px;
+      }
+
+      .nav-link:hover {
+        color: var(--ink);
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 24px auto 0;
+        padding: 0 32px 32px;
+      }
+
+      .eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--forest);
+        margin-bottom: 6px;
+      }
+
+      .hero-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .hero-row h1 {
+        margin: 0;
+        font-size: 2.1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-sub {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+
+      .tagline-chip {
+        background: var(--sage-soft);
+        color: var(--forest);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .left-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px 14px;
+      }
+
+      .stat-card.available-tint {
+        background: var(--available-bg);
+        border-color: var(--available-border);
+      }
+
+      .stat-num {
+        font-size: 2.1rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 6px;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 24px;
+      }
+
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 1.45rem;
+        letter-spacing: -0.015em;
+      }
+
+      .card p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .reserve-btn {
+        width: 100%;
+        background: var(--forest);
+        color: #ffffff;
+        border: none;
+        border-radius: 14px;
+        padding: 15px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background 0.15s ease;
+      }
+
+      .reserve-btn:hover:not(:disabled) {
+        background: var(--forest-hover);
+      }
+
+      .reserve-btn:disabled {
+        background: #9db0a5;
+        cursor: not-allowed;
+      }
+
+      .micro-note {
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      .feedback-box {
+        margin-top: 14px;
+        padding: 11px 14px;
+        border-radius: 12px;
+        background: var(--sage-soft);
+        color: var(--ink);
+        font-size: 0.86rem;
+      }
+
+      .feedback-box.full {
+        background: var(--occupied-bg);
+        color: var(--occupied-ink);
+      }
+
+      .sys-card {
+        background: var(--sage-soft);
+        border: 1px solid #d7e2d5;
+        border-radius: 20px;
+        padding: 22px;
+      }
+
+      .sys-card h3 {
+        margin: 0 0 6px;
+        font-size: 1.15rem;
+      }
+
+      .sys-specs {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--forest);
+        margin-bottom: 10px;
+      }
+
+      .sys-card p {
+        margin: 0;
+        font-size: 0.86rem;
+        color: #4f5f54;
+      }
+
+      .lot-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 26px;
+      }
+
+      .lot-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .lot-header h2 {
+        margin: 0;
+        font-size: 1.55rem;
+      }
+
+      .lot-header p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .spots-pill {
+        background: var(--sage-soft);
+        color: var(--forest);
+        padding: 7px 14px;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .lot-stage {
+        background: #e9efe7;
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .lot-banner {
+        background: #dce5d9;
+        color: #55655a;
+        text-align: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        padding: 7px 12px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+      }
+
+      .slots-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+      }
+
+      .slot {
+        border-radius: 16px;
+        padding: 14px 10px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 265px;
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease;
+      }
+
+      .slot.available {
+        background: var(--available-bg);
+        border: 1.5px dashed var(--available-border);
+      }
+
+      .slot.reserved {
+        background: var(--reserved-bg);
+        border: 1.5px solid var(--reserved-border);
+      }
+
+      .slot.occupied {
+        background: var(--occupied-bg);
+        border: 1.5px solid var(--occupied-border);
+      }
+
+      .slot-top {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .slot-turtle {
+        width: 104px;
+        height: 104px;
+        image-rendering: pixelated;
+        object-fit: contain;
+        border-radius: 12px;
+        margin: 6px 0;
+        transition:
+          opacity 0.15s ease,
+          transform 0.15s ease;
+      }
+
+      .slot.available .slot-turtle {
+        opacity: 0.28;
+        transform: scale(0.95);
+      }
+
+      .slot.reserved .slot-turtle {
+        opacity: 0.85;
+        transform: scale(1);
+      }
+
+      .slot.occupied .slot-turtle {
+        opacity: 1;
+        transform: scale(1.03);
+      }
+
+      .slot-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .slot.available .slot-label {
+        color: var(--available-ink);
+      }
+
+      .slot.reserved .slot-label {
+        color: var(--reserved-ink);
+      }
+
+      .slot.occupied .slot-label {
+        color: var(--occupied-ink);
+      }
+
+      .slot-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .mini-btn {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 7px;
+        padding: 5px 2px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--ink);
+        cursor: pointer;
+      }
+
+      .mini-btn:hover {
+        background: #ffffff;
+      }
+
+      .road-lane {
+        margin-top: 14px;
+        background: #dce5d9;
+        border-radius: 12px;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #55655a;
+      }
+
+      .road-dashes {
+        flex: 1;
+        border-top: 2px dashed rgba(85, 101, 90, 0.45);
+      }
+
+      .legend-bar {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .legend-items {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .dot.green {
+        background: #2f9e5b;
+      }
+
+      .dot.yellow {
+        background: #e0a82e;
+      }
+
+      .dot.red {
+        background: #d64545;
+      }
+
+      footer {
+        max-width: 1280px;
+        margin: 28px auto 0;
+        padding: 18px 32px 28px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      @media (max-width: 1040px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .slots-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img src="turtle.png" alt="Turtle Park" class="brand-img" />
+        <span class="brand-title">turtle park</span>
+      </div>
+      <div class="nav-group">
+        <button class="nav-pill">Dashboard</button>
+        <button class="nav-link" onclick="reserveNextSpot()">
+          Reservation
+        </button>
+        <button class="nav-pill" onclick="resetDemo()">• Demo mode</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="eyebrow">YOUR EVERYDAY PIT STOP</div>
+      <div class="hero-row">
+        <div>
+          <h1>Hello, Turtle Driver!</h1>
+          <p class="hero-sub">Find your little spot.</p>
+        </div>
+        <div class="tagline-chip">✦ PARK A LITTLE HAPPIER</div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="left-stack">
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-num">05</div>
+              <div class="stat-label">Total spaces</div>
+            </div>
+            <div class="stat-card">
+              <div id="occupiedCount" class="stat-num">03</div>
+              <div class="stat-label">Occupied</div>
+            </div>
+            <div class="stat-card available-tint">
+              <div id="availableCount" class="stat-num">02</div>
+              <div class="stat-label">Available</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Make room for a good day.</h2>
+            <p>
+              Your next spot is waiting. We'll assign the first available space
+              for you.
+            </p>
+            <button
+              id="reserveBtn"
+              class="reserve-btn"
+              onclick="reserveNextSpot()"
+            >
+              <span>Reserve a Spot</span>
+              <span>→</span>
+            </button>
+            <div class="micro-note">No circling. No guesswork. Just park.</div>
+            <div id="feedbackBox" class="feedback-box">
+              Next reservation will be assigned
+              <strong>Spot <span id="nextSpotLabel">01</span></strong
+              >.
+            </div>
+          </div>
+
+          <div class="sys-card">
+            <h3>A smart little system</h3>
+            <div class="sys-specs">
+              2 ultrasonic sensors · Servo barrier · LCD
+            </div>
+            <p>
+              Entrance and exit sensors track vehicle flow. Spaces are assigned
+              by reservation, not individual bay sensors. Please park in your
+              assigned spot.
+            </p>
+          </div>
+        </div>
+
+        <section class="lot-card">
+          <div class="lot-header">
+            <div>
+              <h2>The Turtle Lot</h2>
+              <p>A tiny map. A little peace of mind.</p>
+            </div>
+            <span id="spotsOpenPill" class="spots-pill">• 2 spots open</span>
+          </div>
+
+          <div class="lot-stage">
+            <div class="lot-banner">TURTLE PARK</div>
+            <div id="slotsGrid" class="slots-grid"></div>
+            <div class="road-lane">
+              <span>↑ ENTRY</span>
+              <span class="road-dashes"></span>
+              <span>EXIT →</span>
+            </div>
+          </div>
+
+          <div class="legend-bar">
+            <div class="legend-items">
+              <span class="legend-item"
+                ><span class="dot green"></span> Available</span
+              >
+              <span class="legend-item"
+                ><span class="dot yellow"></span> Reserved</span
+              >
+              <span class="legend-item"
+                ><span class="dot red"></span> Occupied</span
+              >
+            </div>
+            <span>Top-down view</span>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <span>© 2026 Turtle Park</span>
+      <span>University project / Simulated reservations</span>
+      <span>Honest parking. Happy turtles.</span>
+    </footer>
+
+    <script>
+      const initialSlots = [
+        { id: 1, state: "available" },
+        { id: 2, state: "available" },
+        { id: 3, state: "occupied" },
+        { id: 4, state: "occupied" },
+        { id: 5, state: "occupied" },
+      ];
+
+      let slots = structuredClone(initialSlots);
+
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+
+      function getNextAvailableSlot() {
+        return slots.find((s) => s.state === "available") || null;
+      }
+
+      function reserveNextSpot() {
+        const target = getNextAvailableSlot();
+        const box = document.getElementById("feedbackBox");
+
+        if (!target) {
+          box.className = "feedback-box full";
+          box.innerHTML =
+            "<strong>Parking Full</strong> — No spaces available. Please check back later.";
+          render();
+          return;
+        }
+
+        target.state = "reserved";
+        box.className = "feedback-box";
+        box.innerHTML = `<strong>Spot ${pad2(target.id)} is yours!</strong> Reservation confirmed. Park in spot ${pad2(target.id)}.`;
+        render();
+      }
+
+      function setSlotState(id, nextState) {
+        const slot = slots.find((s) => s.id === id);
+        if (!slot) return;
+        slot.state = nextState;
+        render();
+      }
+
+      function resetDemo() {
+        slots = structuredClone(initialSlots);
+        const box = document.getElementById("feedbackBox");
+        box.className = "feedback-box";
+        const next = getNextAvailableSlot();
+        box.innerHTML = `Next reservation will be assigned <strong>Spot <span id="nextSpotLabel">${next ? pad2(next.id) : "--"}</span></strong>.`;
+        render();
+      }
+
+      function render() {
+        const occupied = slots.filter((s) => s.state === "occupied").length;
+        const available = slots.filter((s) => s.state === "available").length;
+
+        document.getElementById("occupiedCount").textContent = pad2(occupied);
+        document.getElementById("availableCount").textContent = pad2(available);
+
+        const pill = document.getElementById("spotsOpenPill");
+        if (available === 0) {
+          pill.textContent = "• Lot full";
+        } else if (available === 1) {
+          pill.textContent = "• 1 spot open";
+        } else {
+          pill.textContent = `• ${available} spots open`;
+        }
+
+        const nextSpot = getNextAvailableSlot();
+        document.getElementById("reserveBtn").disabled = !nextSpot;
+
+        const nextLabel = document.getElementById("nextSpotLabel");
+        if (nextLabel) {
+          nextLabel.textContent = nextSpot ? pad2(nextSpot.id) : "--";
+        }
+
+        const grid = document.getElementById("slotsGrid");
+        grid.innerHTML = "";
+
+        for (const s of slots) {
+          const capState = s.state.charAt(0).toUpperCase() + s.state.slice(1);
+          const card = document.createElement("div");
+          card.className = `slot ${s.state}`;
+          card.innerHTML = `
+            <div class="slot-top">${pad2(s.id)}</div>
+            <img src="turtle.png" alt="Turtle slot ${pad2(s.id)}" class="slot-turtle" />
+            <div class="slot-label">${capState}</div>
+            <div class="slot-actions">
+              <button class="mini-btn" onclick="setSlotState(${s.id}, 'occupied')">Park</button>
+              <button class="mini-btn" onclick="setSlotState(${s.id}, 'available')">Exit</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        }
+      }
+
+      render();
+    </script>
+  </body>
+</html>

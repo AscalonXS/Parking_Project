@@ -1,0 +1,1 @@
+javac Web\Server.java; if ($?) {java -cp Web Server}
