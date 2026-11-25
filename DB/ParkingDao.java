@@ -311,4 +311,28 @@ public class ParkingDao
         }
         return list;
     }
+ public List<Car> loadAllCars()
+    {
+        String sql = "Select plate_number"; 
+               sql+= " FROM cars ORDER BY id";
+
+        List<Car> list = new ArrayList<>();
+
+    try (Connection con = DataBase.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery();)
+         {
+            while(rs.next())
+            {
+                list.add(loadCar(rs.getString("plate_number")));
+            }
+         }
+    catch (SQLException e)
+    {
+        e.getStackTrace();
+    }
+
+    return  list;
+    }
+    
 }
