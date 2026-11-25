@@ -464,3 +464,31 @@ Tables :
     -  getUser(String token) : vice versa -> return the UserAccount based on token
 
     - removeSession(String) : void just remove the session in our map
+
+## handlers
+
+HTTP request handlers connecting the web layer with `ParkingService` and `SessionManager` (comments in new code are written in English).
+
+### BaseHandlers.java
+
+Base HTTP handler implementing `HttpHandler` with shared helpers (`service`, `sessions`, `gson`, request body reading, JSON/error responses, and session cookie lookup).
+
+### AuthHandler.java
+
+Handles authentication routes (`/api/login`, `/api/logout`, `/api/me`), session creation/removal via `SessionManager`, and returns user/role details.
+
+### UserHandler.java
+
+Handles `user`-role parking endpoints (`/api/lots`, `/api/lots/{name}`, `/api/park`, `/api/leave`, `/api/car`).
+
+### MonitorHandler.java
+
+Handles monitoring and administrative endpoints.
+
+### StaticHandler.java
+
+Serves static files from `Web/` (`/` defaults to `login.html`), blocks path traversal (`..` or paths escaping `Web/`) with `403`, returns `404` when missing, and sets `Content-Type` based on file extension.
+
+## lib
+
+External JAR dependencies used to compile and run the project (such as `gson-2.11.0.jar` and MySQL Connector/J).

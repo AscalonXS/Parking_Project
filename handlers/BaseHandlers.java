@@ -1,4 +1,4 @@
-package handler;
+package handlers;
 
 import DB.UserDao.UserAccount;
 import com.google.gson.Gson;
@@ -11,13 +11,13 @@ import java.util.Map;
 import services.ParkingService;
 import services.SessionManager;
 
-public abstract class BaseHandler implements HttpHandler
+public abstract class BaseHandlers implements HttpHandler
 {
     protected final ParkingService service;
     protected final SessionManager sessions;
     protected final Gson gson = new Gson();
 
-    public BaseHandler(ParkingService service, SessionManager sessions)
+    public BaseHandlers(ParkingService service, SessionManager sessions)
     {
         this.service = service;
         this.sessions = sessions;

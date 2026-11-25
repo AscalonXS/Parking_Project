@@ -9,7 +9,7 @@ import java.util.Map;
 import services.ParkingService;
 import services.SessionManager;
 
-public class AuthHandler extends BaseHandler
+public class AuthHandler extends BaseHandlers
 {
     private final UserDao userDao;
 
