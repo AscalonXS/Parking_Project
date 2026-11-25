@@ -249,19 +249,24 @@ header {
   min-width: 0; /* stops grid items from overflowing horizontally */
 }
 
-.slots .slotbox .available {
+.slots .slotbox.available {
   background: #e7f5ec;
-  border: 1.5px dashed #8ec7a3;
+  border: 1.5px solid #8ec7a3;
 }
 
-.slots .slotbox .reserved {
+.slots .slotbox.reserved {
   background: #fff6dc;
   border: 1.5px solid #e6be5a;
 }
 
-.slots .slotbox .occupied {
+.slots .slotbox.occupied {
   background: #fdeaea;
   border: 1.5px solid #e38b8b;
+}
+
+.slots .slotbox.occupied img {
+  opacity: 0.45;
+  filter: grayscale(40%);
 }
 
 .slots .slotbox img {
@@ -269,4 +274,58 @@ header {
   height: 96px;
   object-fit: contain;
   margin: 6px 0;
+}
+
+.gdot,
+.rdot,
+.ydot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.gdot {
+  background: #2f9e5b;
+}
+
+.ydot {
+  background: #e0a82e;
+}
+
+.rdot {
+  background: #d64545;
+}
+
+.lotColors {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 13px;
+  color: #4f5f54;
+}
+
+.lotColors .items {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.road {
+  margin-top: 14px;
+  background: #dce5d9;
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* font-size: 0.75rem; */
+  font-size: 16px;
+  color: #55655a;
+}
+
+.dash {
+  flex: 1;
+  border-top: 2px dashed rgba(85, 101, 90, 0.45);
 }
