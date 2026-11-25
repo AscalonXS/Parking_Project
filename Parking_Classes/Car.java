@@ -1,5 +1,6 @@
 package Parking_Classes;
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Car
 {
@@ -28,7 +29,7 @@ public class Car
         this.ps.setIsTaken(true);
     }
 
-    int calculate_fare(Duration a)
+    public int calculate_fare(Duration a)
     {
         long minutes = a.toMinutes();
         int total_fare = 0; // free if below 15 minutes
@@ -46,7 +47,7 @@ public class Car
         return  total_fare;
     }
 
-    void releaseParkSpace(ParkSpace ps)
+    public void releaseParkSpace(ParkSpace ps)
     {
         Duration duration = Duration.between(this.takePlace, LocalDateTime.now());
 
