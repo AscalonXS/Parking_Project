@@ -10,7 +10,7 @@ public class DataBase
 
     public static Connection getConnection() throws SQLException
     {
-        return DriverManager.getConnection(DEFAULT_URL, "root", "E$KyULMY1471");
+        return DriverManager.getConnection(DEFAULT_URL, "root", "4444");
     }
 
     public static void main(String[] args) 

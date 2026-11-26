@@ -1,3 +1,10 @@
+# Prepare 
+
+    Run pip install pyserial once.
+    Plug in the Arduino and start python hardware/serial_to_csv.py --port COM3 --lot "Lot A". Change COM3 to your board's port.
+    Start the server with run.ps1.
+    Open http://localhost:8080/api/count, and the web page should show the car count.
+
 # Parking System 
 
 This is a program for Parking System,

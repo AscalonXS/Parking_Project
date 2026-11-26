@@ -9,9 +9,11 @@ import handler.AuthHandler;
 import handler.MonitorHandler;
 import handler.UserHandler;
 import handler.StaticHandler;
+import handler.CountHandler;
 
 import services.ParkingService;
 import services.SessionManager;
+import services.HardwareCounter;
 
 
 class Server {
@@ -27,9 +29,14 @@ class Server {
         SessionManager sessionManager = new SessionManager();
         UserDao userDao = new UserDao();
 
+        // reads data/cars.csv (written by the Arduino bridge) and counts the cars inside
+        HardwareCounter hardware = new HardwareCounter("data/cars.csv");
+        hardware.start();
+
         AuthHandler authHandler = new AuthHandler(parkingService, sessionManager, userDao);
         MonitorHandler monitorHandler = new MonitorHandler(parkingService, sessionManager);
         UserHandler userHandler = new UserHandler(parkingService, sessionManager);
+        CountHandler countHandler = new CountHandler(parkingService, sessionManager, hardware);
 
         serv.createContext("/api/login", authHandler);
         serv.createContext("/api/logout", authHandler);
@@ -42,48 +49,11 @@ class Server {
         serv.createContext("/api/leave", userHandler);
         serv.createContext("/api/car", userHandler);
 
+        serv.createContext("/api/count", countHandler);
+
         serv.createContext("/", new StaticHandler("ui"));
         
 
-        serv.createContext("/", exchange -> {
-
-                String p = exchange.getRequestURI().getPath();
-                if("/".equals(p)) {
-                    p = "/ui/index.html";
-                }
-                Path file_path = Path.of("." + p);
-
-                if (!Files.exists(file_path) || Files.isDirectory(file_path)) 
-                {
-                    String rb = "404 not F0uNd";
-
-                    exchange.sendResponseHeaders(404, rb.length());
-                    exchange.getResponseBody().write(rb.getBytes());
-                    exchange.close();
-                    return;
-                }
-                else
-                {
-                    byte[] data = Files.readAllBytes(file_path);
-                    String content_type = Files.probeContentType(file_path);
-
-                    if(content_type == null ){
-                    
-                        if(p.endsWith(".js")) content_type = "application/javascript";
-                        else if(p.endsWith(".css")) content_type = "text/css";
-                        else if(p.endsWith(".html")) content_type = "text/html";
-                        else if(p.endsWith(".png")) content_type = "image/png";
-                        else content_type = "application/octet-stream";
-                                                
-
-                    }
-                    exchange.getResponseHeaders().set("Content-Type", content_type);
-                    exchange.sendResponseHeaders(200, data.length);
-                    exchange.getResponseBody().write(data);
-
-                    exchange.close();
-                }
-        });  
 
         serv.start();
         System.out.println("Server started on http://localhost:8080");

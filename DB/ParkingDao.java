@@ -336,5 +336,4 @@ public class ParkingDao
         }
         return list;
     }
-    
 }
