@@ -15,7 +15,7 @@ public class StaticHandler implements HttpHandler {
     private final Path webRoot;
     
     public StaticHandler(){
-        this("Web");
+        this("ui");
     }
     public StaticHandler(String webRootDir){
         this.webRoot = Paths.get(webRootDir).toAbsolutePath().normalize();
@@ -40,10 +40,10 @@ public class StaticHandler implements HttpHandler {
                 return;
             }
 
-            String relativePath = decodedPath.equals("/") ? "login.html" : decodedPath.replaceFirst("^/+", "");
+            String relativePath = decodedPath.equals("/") ? "index.html" : decodedPath.replaceFirst("^/+", "");
 
             if(relativePath.isEmpty()){
-                relativePath = "login.html";
+                relativePath = "index.html";
             }
 
             Path targetFile = webRoot.resolve(relativePath).normalize();
