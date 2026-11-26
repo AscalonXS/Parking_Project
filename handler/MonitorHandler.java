@@ -1,4 +1,5 @@
-package handlers;
+package handler;
+
 import DB.UserDao.UserAccount;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import services.LotDetail;
 import services.ParkingService;
 import services.SessionManager;
 
-    public class MonitorHandler extends BaseHandlers{
+    public class MonitorHandler extends BaseHandler{
     public MonitorHandler(ParkingService service, SessionManager sessions){
         // pass shared service and session to BaseHandler
         super(service, sessions);

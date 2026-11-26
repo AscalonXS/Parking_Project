@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import DB.UserDao.UserAccount;
 import com.google.gson.JsonSyntaxException;
@@ -12,7 +12,7 @@ import services.ParkResult;
 import services.ParkingService;
 import services.SessionManager;
 
-public class UserHandler extends BaseHandlers{
+public class UserHandler extends BaseHandler{
     // JSON body sent by POST /api/park: {"lot": "A1"}
     private static class ParkRequest{
         String lot;
