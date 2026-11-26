@@ -8,6 +8,7 @@ import java.nio.file.*;
 import handler.AuthHandler;
 import handler.MonitorHandler;
 import handler.UserHandler;
+import handler.StaticHandler;
 
 import services.ParkingService;
 import services.SessionManager;
@@ -40,6 +41,8 @@ class Server {
         serv.createContext("/api/park", userHandler);
         serv.createContext("/api/leave", userHandler);
         serv.createContext("/api/car", userHandler);
+
+        serv.createContext("/", new StaticHandler("ui"));
         
 
         serv.createContext("/", exchange -> {
