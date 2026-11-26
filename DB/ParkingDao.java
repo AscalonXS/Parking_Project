@@ -143,6 +143,32 @@ public class ParkingDao
         }
     }
 
+    public List<Car> loadAllCars()
+    {
+        String sql = "SELECT plate_number, owner_name, car_type, balance FROM cars";
+        List<Car> list = new ArrayList<>();
+
+        try (Connection con = DataBase.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery())
+        {
+            while (rs.next())
+            {
+                list.add(new Car(
+                    rs.getString("car_type"),
+                    rs.getString("owner_name"),
+                    rs.getString("plate_number"),
+                    rs.getInt("balance")
+                ));
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
     public List<String[]> loadOpenSessions()
     {
         //Loading a Session

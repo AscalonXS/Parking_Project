@@ -1,0 +1,331 @@
+:root {
+  background-color: #f6f6f1;
+  color: #1d2620;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e2e6de;
+}
+
+.topbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.turtle-logo {
+  width: 40px;
+  height: 40px;
+  /* image-rendering: crisp-edges; */
+}
+
+.brand {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  font-family: "Silkscreen";
+  letter-spacing: -4px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.box {
+  padding: 24px 20px;
+  /* max-width: 1280px; */
+}
+
+.ment {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
+  /* padding-left: 5px; */
+}
+
+.wc h1 {
+  font-family: "Silkscreen";
+  letter-spacing: -4px;
+  margin: 0;
+  margin-left: -3px;
+  /* padding: 10px; */
+}
+
+.wc p {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.traffic {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+  /* padding: 20px; */
+}
+
+.leftstack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* padding-right: 50px; */
+}
+
+.statsrow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-minibox {
+  background: #ffffff;
+  border: 1px solid #e2e6de;
+  border-radius: 12px;
+  padding: 18px 14px;
+}
+
+.num {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: -5px;
+  margin-bottom: 15px;
+  line-height: 1;
+}
+
+.stat-info {
+  font-size: 12px;
+  margin-bottom: -3px;
+}
+
+.stat-miniavail {
+  background: #e7f5ec;
+  border: 1px solid #8ec7a3;
+  border-radius: 12px;
+  padding: 18px 14px;
+}
+
+.ResCard {
+  background: #ffffff;
+  border: 1px solid #e2e6de;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.ResCard h2 {
+  margin: 0 0 16px;
+  letter-spacing: -0.75px;
+}
+
+.ResCard p {
+  margin: 0 0 16px;
+  color: #657369;
+  font-size: 11px;
+}
+
+.ResBtn {
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #2d5a42;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+
+.ResBtn:hover {
+  background: #234734;
+}
+
+.ment2 {
+  text-align: center;
+  font-size: 11px;
+  padding: 10px 15px;
+  margin-top: 10px;
+}
+
+.HWdeets {
+  background-color: #eaf1e8;
+  border: 1px solid #d7e2d5;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.HWdeets h3 {
+  margin: 0 0 10px;
+  font-size: 18.5px;
+}
+
+.tools {
+  margin: 0;
+  color: #2d5a42;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.HWdeets p {
+  color: #4f5f54;
+  /* margin: 7px; */
+  font-size: 13px;
+}
+
+.rightstack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.LotCard {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e6de;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 26px;
+}
+
+.LotCard h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.LotCard p {
+  margin: 5px 0 0px;
+  color: #657369;
+}
+
+/* up until here */
+
+.lotslots {
+  background-color: #dce5d9;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.judul {
+  background: #dce5d9;
+  color: #55655a;
+  font-weight: 700;
+  padding: 7px 12px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  letter-spacing: 0.2;
+  text-align: center;
+  font-family: "Silkscreen";
+  letter-spacing: -1px;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.slotbox {
+  background: #ffffff;
+  border: 1.5px solid #cfd8cf;
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0; /* stops grid items from overflowing horizontally */
+}
+
+.slots .slotbox.available {
+  background: #e7f5ec;
+  border: 1.5px solid #8ec7a3;
+}
+
+.slots .slotbox.reserved {
+  background: #fff6dc;
+  border: 1.5px solid #e6be5a;
+}
+
+.slots .slotbox.occupied {
+  background: #fdeaea;
+  border: 1.5px solid #e38b8b;
+}
+
+.slots .slotbox.occupied img {
+  opacity: 0.45;
+  filter: grayscale(40%);
+}
+
+.slots .slotbox img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  margin: 6px 0;
+}
+
+.gdot,
+.rdot,
+.ydot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.gdot {
+  background: #2f9e5b;
+}
+
+.ydot {
+  background: #e0a82e;
+}
+
+.rdot {
+  background: #d64545;
+}
+
+.lotColors {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 13px;
+  color: #4f5f54;
+}
+
+.lotColors .items {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.road {
+  margin-top: 14px;
+  background: #dce5d9;
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* font-size: 0.75rem; */
+  font-size: 16px;
+  color: #55655a;
+}
+
+.dash {
+  flex: 1;
+  border-top: 2px dashed rgba(85, 101, 90, 0.45);
+}
