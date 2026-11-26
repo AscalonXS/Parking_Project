@@ -1,9 +1,13 @@
 package DB;
 
+import Parking_Classes.Car;
+import Parking_Classes.ParkSpace;
+import Parking_Classes.Parking;
+import  Parking_Classes.ParkingManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import  java.sql.SQLException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,11 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import Parking_Classes.Car;
-import Parking_Classes.ParkSpace;
-import Parking_Classes.Parking;
-import Parking_Classes.ParkingManager;
 
 public class ParkingDao
 {
@@ -336,29 +335,6 @@ public class ParkingDao
             throw new RuntimeException(e);
         }
         return list;
-    }
- public List<Car> loadAllCars()
-    {
-        String sql = "Select plate_number"; 
-               sql+= " FROM cars ORDER BY id";
-
-        List<Car> list = new ArrayList<>();
-
-    try (Connection con = DataBase.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery();)
-         {
-            while(rs.next())
-            {
-                list.add(loadCar(rs.getString("plate_number")));
-            }
-         }
-    catch (SQLException e)
-    {
-        e.getStackTrace();
-    }
-
-    return  list;
     }
     
 }
