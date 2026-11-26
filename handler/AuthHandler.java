@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import DB.UserDao;
 import DB.UserDao.UserAccount;
